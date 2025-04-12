@@ -22,21 +22,21 @@ int CheckPwd() {
     return 0;
 }
 
-void gotoxy(short x, short y) {
+void gotoxy(const short x, const short y) {
     HANDLE hConsoleOutput;
     COORD Cursor_an_Pos = {x, y};
     hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleCursorPosition(hConsoleOutput, Cursor_an_Pos);
 }
 
-int wherex(void) {
+short wherex() {
     HANDLE hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
     CONSOLE_SCREEN_BUFFER_INFO screen_buffer_info;
     GetConsoleScreenBufferInfo(hConsoleOutput, &screen_buffer_info);
     return screen_buffer_info.dwCursorPosition.X;
 }
 
-int wherey(void) {
+short wherey() {
     HANDLE hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
     CONSOLE_SCREEN_BUFFER_INFO screen_buffer_info;
     GetConsoleScreenBufferInfo(hConsoleOutput, &screen_buffer_info);
@@ -56,8 +56,7 @@ void clreol() {
 }
 
 void SetColor(WORD color) {
-    HANDLE hConsoleOutput;
-    hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
+    HANDLE hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
 
     CONSOLE_SCREEN_BUFFER_INFO screen_buffer_info;
     GetConsoleScreenBufferInfo(hConsoleOutput, &screen_buffer_info);
@@ -71,8 +70,7 @@ void SetColor(WORD color) {
 }
 
 void SetBGColor(WORD color) {
-    HANDLE hConsoleOutput;
-    hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
+    HANDLE hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
 
     CONSOLE_SCREEN_BUFFER_INFO screen_buffer_info;
     GetConsoleScreenBufferInfo(hConsoleOutput, &screen_buffer_info);

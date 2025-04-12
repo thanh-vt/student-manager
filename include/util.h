@@ -18,9 +18,9 @@ int CheckPwd();
 
 void gotoxy(short x, short y);
 
-int wherex();
+short wherex();
 
-int wherey();
+short wherey();
 
 void clreol();
 

@@ -18,7 +18,7 @@ struct node {
     node *next;
 };
 
-typedef struct node *PTR;
+typedef node *PTR;
 
 //const int MAXLIST =100;
 
@@ -54,7 +54,7 @@ int check_snt(int n) {
 
 int Insert_After(PTR p, Sinhvien x) {
     PTR q;
-    if (p == NULL) return 0;
+    if (p == nullptr) return 0;
     q = new node;
     q->sv = x;
     q->next = p->next;
@@ -65,7 +65,7 @@ int Insert_After(PTR p, Sinhvien x) {
 
 int Delete_First(PTR &First) {
     PTR p;
-    if (First == NULL) return 0;
+    if (First == nullptr) return 0;
     p = First; // nut can xoa la nut dau
     First = p->next;
     delete p;
@@ -84,16 +84,17 @@ int Menu(char td[so_item][50]) {
 Nhaplai:
     gotoxy(cot, dong + so_item);
     cout << "Ban chon 1 so (1.." << so_item << ") :    ";
-    gotoxy(wherex() - 4, wherey());
+    gotoxy(static_cast<short>(wherex() - 4), wherey());
     cin >> chon;
     if (chon < 1 || chon > so_item) goto Nhaplai;
     return chon;
 }
 
-void BaoLoi(char *s) {
-    int x = wherex(), y = wherey();
+void BaoLoi(const string& msg) {
+    const short x = wherex();
+    const short y = wherey();
     gotoxy(10, 24);
-    cout << s;
+    cout << msg;
     Sleep(4000);
     gotoxy(10, 24);
     clreol();
@@ -101,9 +102,9 @@ void BaoLoi(char *s) {
 }
 
 PTR Search(PTR First, int x) {
-    for (PTR p = First; p != NULL; p = p->next)
+    for (PTR p = First; p != nullptr; p = p->next)
         if (p->sv.maso == x) return p;
-    return NULL;
+    return nullptr;
 }
 
 int NhapSV(PTR First, Sinhvien &sv) {
@@ -111,7 +112,7 @@ NhaplaiMaSV:
     cout << "\nMa so sinh vien (<=0 dung nhap):";
     cin >> sv.maso;
     if (sv.maso <= 0) return 0;
-    if (Search(First, sv.maso) != NULL) {
+    if (Search(First, sv.maso) != nullptr) {
         BaoLoi("Ma so sinh vien bi trung. Ban nhap lai. ");
         goto NhaplaiMaSV;
     }
@@ -139,7 +140,7 @@ void NhapSV_VeDau(PTR &First) {
     PTR p;
     Sinhvien sv;
     int err;
-    while (1) {
+    while (true) {
         err = NhapSV(First, sv);
         if (err == 1) return;
         Insert_First(First, sv);
@@ -149,20 +150,20 @@ void NhapSV_VeDau(PTR &First) {
 void Nhap_DSSV(PTR &First) {
     // them ve cuoi
     system("cls");
-    PTR p, Last;
+    PTR Last = nullptr;
     Sinhvien sv;
     int err;
-    if (First != NULL)
-        for (Last = First; Last->next != NULL; Last = Last->next);
+    if (First != nullptr)
+        for (Last = First; Last->next != nullptr; Last = Last->next);
 
     while (true) {
         err = NhapSV(First, sv);
         if (err == 0) return;
 
-        p = new node;
+        PTR p = new node;
         p->sv = sv;
-        p->next = NULL;
-        if (First == NULL) First = p;
+        p->next = nullptr;
+        if (First == nullptr) First = p;
         else Last->next = p;
         Last = p;
     }
@@ -172,7 +173,7 @@ void LietKe(PTR First) {
     int dem = 0;
     system("cls");
     printf("MaSV        Ho              Ten      DTB     Hang\n");
-    for (PTR p = First; p != NULL; p = p->next) {
+    for (PTR p = First; p != nullptr; p = p->next) {
         printf("%5d %-20s %-10s %.1f %5d\n",
                p->sv.maso, p->sv.ho, p->sv.ten, p->sv.dtb, p->sv.hang);
         dem++;
@@ -183,15 +184,15 @@ void LietKe(PTR First) {
 
 int Reccount(PTR First) {
     int dem = 0;
-    for (PTR p = First; p != NULL; p = p->next)
+    for (PTR p = First; p != nullptr; p = p->next)
         dem++;
     return dem;
 }
 
 int SaveFile(PTR First, char *tenfile) {
     FILE *f = fopen(tenfile, "wb");
-    if (f == NULL) return 0;
-    for (PTR p = First; p != NULL; p = p->next)
+    if (f == nullptr) return 0;
+    for (PTR p = First; p != nullptr; p = p->next)
         fwrite(&p->sv, sizeof(Sinhvien), 1, f);
     fclose(f);
     return 1;
@@ -200,11 +201,11 @@ int SaveFile(PTR First, char *tenfile) {
 void InsertLast(PTR &First, Sinhvien sv) {
     PTR p = new node;
     p->sv = sv;
-    p->next = NULL;
-    if (First == NULL) First = p;
+    p->next = nullptr;
+    if (First == nullptr) First = p;
     else {
         PTR Last;
-        for (Last = First; Last->next != NULL; Last = Last->next);
+        for (Last = First; Last->next != nullptr; Last = Last->next) {}
         Last->next = p;
     }
 }
@@ -213,9 +214,9 @@ int OpenFile(PTR &First, char *tenfile) {
     PTR p;
     Sinhvien sv;
     FILE *f = fopen(tenfile, "rb");
-    if (f == NULL) return 0; // mo file khong duoc
+    if (f == nullptr) return 0; // mo file khong duoc
 
-    while (First != NULL) {
+    while (First != nullptr) {
         p = First;
         First = p->next;
         delete p;
@@ -242,7 +243,7 @@ void Insert_Order(PTR &First, Sinhvien x) {
     PTR p, t, s; // t la nut truoc, s la nut sau
     p = new node;
     p->sv = x;
-    for (s = First; s != NULL && s->sv.maso < x.maso; t = s, s = s->next);
+    for (s = First; s != nullptr && s->sv.maso < x.maso; t = s, s = s->next);
     if (s == First) // them nut vao dau danh sach lien ket
     {
         p->next = First;
@@ -256,8 +257,7 @@ void Insert_Order(PTR &First, Sinhvien x) {
 
 int Delete_after(PTR p) {
     PTR q;
-
-    if ((p == NULL) || (p->next == NULL))
+    if ((p == nullptr) || (p->next == nullptr))
         return 0;
     q = p->next; // q chi nut can xoa
     p->next = q->next;
@@ -268,13 +268,13 @@ int Delete_after(PTR p) {
 
 int Xoa_SV_theo_Masv(PTR &First, int x) {
     PTR p = First;
-    if (First == NULL) return 0;
+    if (First == nullptr) return 0;
     if (First->sv.maso == x) {
         return Delete_First(First);
     }
 
-    for (p = First; p->next != NULL && p->next->sv.maso != x; p = p->next);
-    if (p->next != NULL) {
+    for (p = First; p->next != nullptr && p->next->sv.maso != x; p = p->next) {}
+    if (p->next != nullptr) {
         return Delete_after(p);
     }
     return 0;
@@ -286,9 +286,9 @@ int main() {
     int x;
     char tensv[16];
     int chon;
-    PTR First = NULL;
+    PTR First = nullptr;
     int so;
-    PTR First1 = NULL, First2 = NULL;
+    PTR First1 = nullptr, First2 = nullptr;
 
     int i;
     Sinhvien sv;
@@ -355,7 +355,5 @@ int main() {
                 break;
             case so_item: return 0;
         }
-    } while (1);
-
-    return 0;
+    } while (true);
 }
